@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GlobalSolution_.NET.Models
 {
     [Table("Coordenadas")]
-    public class Coordenadas
+    public class CoordenadasModel
     {
         [Key]
         [Column("id_coordenadas")]

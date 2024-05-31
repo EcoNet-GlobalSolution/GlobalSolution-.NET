@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GlobalSolution_.NET.Models
 {
     [Table("Especie")]
-    public class Especie
+    public class EspecieModel
     {
         [Key]
         [Column("id_especie")]

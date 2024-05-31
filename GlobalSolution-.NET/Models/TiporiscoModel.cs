@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace GlobalSolution_.NET.Models
 {
     [Table("Tipo_risco")]
-    public class Tiporisco
+    public class TiporiscoModel
     {
         [Key]
         [Column("id_risco")]
