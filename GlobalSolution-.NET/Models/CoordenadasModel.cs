@@ -14,12 +14,15 @@ namespace GlobalSolution_.NET.Models
         [Display(Name = "Longitude")]
         [Range(-180, 180, ErrorMessage = "A longitude deve estar entre -180 e 180 graus.")]
         [Column("longitude")]
-        public int longitude { get; set; }
+        public double longitude { get; set; }
 
         [Required(ErrorMessage = "Latitude é obrigatória.")]
         [Display(Name = "Latitude")]
         [Range(-90, 90, ErrorMessage = "A latitude deve estar entre -90 e 90 graus.")]
         [Column("latitude")]
-        public int latitude { get; set; }
+        public double latitude { get; set; }
+
+        [InverseProperty("Coordenadas")]
+        public ICollection<DeteccaoModel> Deteccao { get; set; } = new List<DeteccaoModel>();
     }
 }

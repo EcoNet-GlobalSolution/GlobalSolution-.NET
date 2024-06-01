@@ -21,5 +21,13 @@ namespace GlobalSolution_.NET.Models
         [Display(Name = "Espécie")]
         [Column("especie")]
         public string? especie { get; set; }
+
+        [ForeignKey("Tipo_risco")]
+        [Column("id_risco")]
+        public int id_risco { get; set; }
+        public TiporiscoModel? Tipos { get; set; }
+
+        [InverseProperty("Especie")]
+        public ICollection<DeteccaoModel> Deteccao { get; set; } = new List<DeteccaoModel>();
     }
 }

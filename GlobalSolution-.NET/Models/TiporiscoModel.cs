@@ -15,5 +15,8 @@ namespace GlobalSolution_.NET.Models
         [EnumDataType(typeof(CategoriaRisco), ErrorMessage = "Categoria inválida.")]
         [Column("categoria")]
         public CategoriaRisco? categoria { get; set; }
+
+        [InverseProperty("Tipos")]
+        public ICollection<EspecieModel> Especie { get; set; } = new List<EspecieModel>();
     }
 }
