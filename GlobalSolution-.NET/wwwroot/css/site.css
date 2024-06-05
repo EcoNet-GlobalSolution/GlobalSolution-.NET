@@ -18,5 +18,16 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #121212;
+    color: #fff;
+}
+
+.bg-dark-blue {
+    background-color: #172b4d;
+    color: #fff
+}
+
+.bg-very-dark-blue {
+    background-color: #0a1633;
+    color: #ffffff;
 }
