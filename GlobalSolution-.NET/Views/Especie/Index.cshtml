@@ -1,0 +1,50 @@
+﻿@model IEnumerable<GlobalSolution_.NET.Models.EspecieModel>
+
+@{
+    ViewData["Title"] = "Espécies";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table text-white">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_especie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nome_comum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.especie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_risco)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_especie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nome_comum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.especie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_risco)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id_especie">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id_especie">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id_especie">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

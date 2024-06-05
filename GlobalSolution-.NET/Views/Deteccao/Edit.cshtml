@@ -1,0 +1,43 @@
+﻿@model GlobalSolution_.NET.Models.DeteccaoModel
+
+@{
+    ViewData["Title"] = "Edit Deteccção";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="id_deteccao" />
+            <div class="form-group">
+                <label asp-for="data" class="control-label"></label>
+                <input asp-for="data" class="form-control" />
+                <span asp-validation-for="data" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_coordenadas" class="control-label"></label>
+                <select asp-for="id_coordenadas" class="form-control" asp-items="ViewBag.id_coordenadas"></select>
+                <span asp-validation-for="id_coordenadas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="id_especie" class="control-label"></label>
+                <select asp-for="id_especie" class="form-control" asp-items="ViewBag.id_especie"></select>
+                <span asp-validation-for="id_especie" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

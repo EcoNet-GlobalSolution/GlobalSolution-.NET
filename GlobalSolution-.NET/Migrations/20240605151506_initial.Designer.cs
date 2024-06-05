@@ -12,7 +12,7 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace GlobalSolution_.NET.Migrations
 {
     [DbContext(typeof(OracleDbContext))]
-    [Migration("20240601014435_Initial")]
+    [Migration("20240605151506_initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -86,9 +86,6 @@ namespace GlobalSolution_.NET.Migrations
 
                     OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id_especie"));
 
-                    b.Property<int?>("Tiposid_risco")
-                        .HasColumnType("NUMBER(10)");
-
                     b.Property<string>("especie")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -107,7 +104,7 @@ namespace GlobalSolution_.NET.Migrations
 
                     b.HasKey("id_especie");
 
-                    b.HasIndex("Tiposid_risco");
+                    b.HasIndex("id_risco");
 
                     b.ToTable("Especie");
                 });
@@ -151,11 +148,13 @@ namespace GlobalSolution_.NET.Migrations
 
             modelBuilder.Entity("GlobalSolution_.NET.Models.EspecieModel", b =>
                 {
-                    b.HasOne("GlobalSolution_.NET.Models.TiporiscoModel", "Tipos")
+                    b.HasOne("GlobalSolution_.NET.Models.TiporiscoModel", "Tiporisco")
                         .WithMany("Especie")
-                        .HasForeignKey("Tiposid_risco");
+                        .HasForeignKey("id_risco")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Tipos");
+                    b.Navigation("Tiporisco");
                 });
 
             modelBuilder.Entity("GlobalSolution_.NET.Models.CoordenadasModel", b =>

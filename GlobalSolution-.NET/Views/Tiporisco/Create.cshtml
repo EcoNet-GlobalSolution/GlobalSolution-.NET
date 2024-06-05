@@ -1,0 +1,31 @@
+﻿@model GlobalSolution_.NET.Models.TiporiscoModel
+
+@{
+    ViewData["Title"] = "Create Risco";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label for="categoria">Categoria do risco <span class="text-danger">*</span></label>
+                <select asp-for="categoria" class="form-control" asp-items="@(ViewBag.CategoriaRisco as IEnumerable<SelectListItem>)"></select>
+            </div>
+            <p class="form-text text-muted small mt-2">
+                CR: Criticamente em perigo; CR-PEX: Criticamente em perigo e possivelmente extinta; EN: Em perigo; VU: Vulnerável
+            </p>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <input type="hidden" name="id_coordenadas" value="@ViewBag.id_coordenadas" />
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

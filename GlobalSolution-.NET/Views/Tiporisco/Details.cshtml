@@ -1,0 +1,23 @@
+﻿@model GlobalSolution_.NET.Models.TiporiscoModel
+
+@{
+    ViewData["Title"] = "Details Risco";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.categoria)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.categoria)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.id_risco">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
