@@ -46,17 +46,17 @@ namespace GlobalSolution_.NET.Migrations
                         .Annotation("Oracle:Identity", "START WITH 1 INCREMENT BY 1"),
                     nome_comum = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false),
                     especie = table.Column<string>(type: "NVARCHAR2(100)", maxLength: 100, nullable: false),
-                    id_risco = table.Column<int>(type: "NUMBER(10)", nullable: false),
-                    Tiposid_risco = table.Column<int>(type: "NUMBER(10)", nullable: true)
+                    id_risco = table.Column<int>(type: "NUMBER(10)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Especie", x => x.id_especie);
                     table.ForeignKey(
-                        name: "FK_Especie_Tipo_risco_Tiposid_risco",
-                        column: x => x.Tiposid_risco,
+                        name: "FK_Especie_Tipo_risco_id_risco",
+                        column: x => x.id_risco,
                         principalTable: "Tipo_risco",
-                        principalColumn: "id_risco");
+                        principalColumn: "id_risco",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,9 +97,9 @@ namespace GlobalSolution_.NET.Migrations
                 column: "id_especie");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Especie_Tiposid_risco",
+                name: "IX_Especie_id_risco",
                 table: "Especie",
-                column: "Tiposid_risco");
+                column: "id_risco");
         }
 
         /// <inheritdoc />

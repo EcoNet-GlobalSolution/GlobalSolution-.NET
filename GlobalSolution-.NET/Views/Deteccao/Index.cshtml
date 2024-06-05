@@ -1,0 +1,50 @@
+﻿@model IEnumerable<GlobalSolution_.NET.Models.DeteccaoModel>
+
+@{
+    ViewData["Title"] = "Deteccao";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table text-white">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_coordenadas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.data)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Coordenadas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Especie)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id_coordenadas)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.data)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Coordenadas.id_coordenadas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Especie.especie)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id_deteccao">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id_deteccao">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id_deteccao">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -22,10 +22,10 @@ namespace GlobalSolution_.NET.Models
         [Column("especie")]
         public string? especie { get; set; }
 
-        [ForeignKey("Tipo_risco")]
+        [ForeignKey("Tiporisco")]
         [Column("id_risco")]
         public int id_risco { get; set; }
-        public TiporiscoModel? Tipos { get; set; }
+        public TiporiscoModel? Tiporisco { get; set; }
 
         [InverseProperty("Especie")]
         public ICollection<DeteccaoModel> Deteccao { get; set; } = new List<DeteccaoModel>();

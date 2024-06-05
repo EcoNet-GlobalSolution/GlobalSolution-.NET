@@ -1,0 +1,35 @@
+﻿@model GlobalSolution_.NET.Models.EspecieModel
+
+@{
+    ViewData["Title"] = "Details Espécie";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.nome_comum)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.nome_comum)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.especie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.especie)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_risco)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_risco)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.id_especie">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

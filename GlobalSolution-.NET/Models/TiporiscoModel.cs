@@ -16,7 +16,7 @@ namespace GlobalSolution_.NET.Models
         [Column("categoria")]
         public CategoriaRisco? categoria { get; set; }
 
-        [InverseProperty("Tipos")]
+        [InverseProperty("Tiporisco")]
         public ICollection<EspecieModel> Especie { get; set; } = new List<EspecieModel>();
     }
 }

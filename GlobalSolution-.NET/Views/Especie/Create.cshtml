@@ -1,0 +1,39 @@
+﻿@model GlobalSolution_.NET.Models.EspecieModel
+
+@{
+    ViewData["Title"] = "Create Espécie";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="nome_comum" class="control-label"></label>
+                <input asp-for="nome_comum" class="form-control" />
+                <span asp-validation-for="nome_comum" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="especie" class="control-label"></label>
+                <input asp-for="especie" class="form-control" />
+                <span asp-validation-for="especie" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+            <input type="hidden" name="id_coordenadas" value="@ViewBag.id_coordenadas" />
+            <input type="hidden" name="id_risco" value="@ViewBag.id_risco" />
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
