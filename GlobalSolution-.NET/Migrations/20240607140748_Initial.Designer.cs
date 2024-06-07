@@ -12,7 +12,7 @@ using Oracle.EntityFrameworkCore.Metadata;
 namespace GlobalSolution_.NET.Migrations
 {
     [DbContext(typeof(OracleDbContext))]
-    [Migration("20240605151506_initial")]
+    [Migration("20240607140748_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
