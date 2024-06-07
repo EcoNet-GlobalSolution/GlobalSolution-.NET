@@ -1,0 +1,38 @@
+﻿@model GlobalSolution_.NET.Models.DeteccaoModel
+
+@{
+    ViewData["Title"] = "Delete Deteccção";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.data)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.data)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Coordenadas)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Coordenadas.id_coordenadas)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Especie)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Especie.especie)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="id_deteccao" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
