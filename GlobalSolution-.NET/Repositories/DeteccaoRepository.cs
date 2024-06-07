@@ -31,9 +31,7 @@ namespace GlobalSolution_.NET.Repositories
 
         public DeteccaoModel Atualizar(DeteccaoModel deteccao)
         {
-            DeteccaoModel deteccaoDb = ListarPorId(deteccao.id_deteccao);
-            if (deteccaoDb == null) throw new Exception("Erro ao atualizar a detecção.");
-
+            DeteccaoModel deteccaoDb = ListarPorId(deteccao.id_deteccao) ?? throw new Exception("Erro ao atualizar a detecção.");
             deteccaoDb.data = deteccao.data;
             
             _bancoContext.Deteccao.Update(deteccaoDb);
@@ -43,10 +41,7 @@ namespace GlobalSolution_.NET.Repositories
 
         public bool Apagar(int id_deteccao)
         {
-            DeteccaoModel deteccaoDb = ListarPorId(id_deteccao);
-
-            if (deteccaoDb == null) throw new Exception("Erro ao apagar detecção.");
-
+            DeteccaoModel deteccaoDb = ListarPorId(id_deteccao) ?? throw new Exception("Erro ao apagar detecção.");
             _bancoContext.Deteccao.Remove(deteccaoDb);
             _bancoContext.SaveChanges();
             return true;

@@ -26,13 +26,8 @@ namespace GlobalSolution_.NET.Controllers
             return View(coordenadas);
         }
 
-        public async Task<IActionResult> Details(int id_coordenadas)
+        public IActionResult Details(int id_coordenadas)
         {
-            if (id_coordenadas == null)
-            {
-                return NotFound();
-            }
-
             CoordenadasModel coordenadas = _coordenadasRepository.ListarPorId(id_coordenadas);
 
             if (coordenadas == null)

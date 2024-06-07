@@ -26,13 +26,8 @@ namespace GlobalSolution_.NET.Controllers
             return View(deteccoes);
         }
 
-        public async Task<IActionResult> Details(int id_deteccao)
-        {
-            if (id_deteccao == null)
-            {
-                return NotFound();
-            }
-
+        public IActionResult Details(int id_deteccao)
+        { 
             DeteccaoModel deteccoes = _deteccaoRepository.ListarPorId(id_deteccao);
 
             if (deteccoes == null)

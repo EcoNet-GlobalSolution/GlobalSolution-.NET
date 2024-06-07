@@ -31,10 +31,7 @@ namespace GlobalSolution_.NET.Repositories
 
         public CoordenadasModel Atualizar (CoordenadasModel coordenadas)
         {
-            CoordenadasModel coordenadasDb = ListarPorId(coordenadas.id_coordenadas);
-
-            if (coordenadasDb == null) throw new Exception("Erro ao atualizar as coordenadas!");
-
+            CoordenadasModel coordenadasDb = ListarPorId(coordenadas.id_coordenadas) ?? throw new Exception("Erro ao atualizar as coordenadas!");
             coordenadasDb.longitude = coordenadas.longitude;
             coordenadasDb.latitude = coordenadas.latitude;
 
@@ -45,10 +42,7 @@ namespace GlobalSolution_.NET.Repositories
 
         public bool Apagar(int id_coordenadas)
         {
-            CoordenadasModel coordenadasDb = ListarPorId(id_coordenadas);
-
-            if (coordenadasDb == null) throw new Exception("Erro ao apagar as coordenadas!");
-
+            CoordenadasModel coordenadasDb = ListarPorId(id_coordenadas) ?? throw new Exception("Erro ao apagar as coordenadas!");
             _bancoContext.Coordenadas.Remove(coordenadasDb);
             _bancoContext.SaveChanges();
             return true;
