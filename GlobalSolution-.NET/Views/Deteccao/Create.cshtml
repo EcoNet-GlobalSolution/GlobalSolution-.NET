@@ -16,8 +16,8 @@
                 <input asp-for="data" class="form-control" />
                 <span asp-validation-for="data" class="text-danger"></span>
             </div>
-            <input type="hidden" name="id_coordenadas" value="@ViewBag.id_coordenadas" />
-            <input type="hidden" name="id_especie" value="@ViewBag.id_especie" />
+            <input type="hidden" asp-for="id_coordenadas" />
+            <input type="hidden" asp-for="id_especie" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
