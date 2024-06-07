@@ -8,43 +8,42 @@ using Microsoft.EntityFrameworkCore;
 using GlobalSolution_.NET.Models;
 using GlobalSolution_.NET.Persistence;
 using GlobalSolution_.NET.Enums;
+using GlobalSolution_.NET.Repositories;
 
 namespace GlobalSolution_.NET.Controllers
 {
     public class TiporiscoController : Controller
     {
-        private readonly OracleDbContext _context;
+        private readonly ITiporiscoRepository _tiporiscoRepository;
 
-        public TiporiscoController(OracleDbContext context)
+        public TiporiscoController(ITiporiscoRepository tiporiscoRepository)
         {
-            _context = context;
+            _tiporiscoRepository = tiporiscoRepository;
         }
 
-        // GET: Tiporisco
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Tiporisco.ToListAsync());
+            List<TiporiscoModel> tiporiscos = _tiporiscoRepository.BuscarTodos();
+            return View(tiporiscos);
         }
 
-        // GET: Tiporisco/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id_risco)
         {
-            if (id == null)
+            if (id_risco == null)
             {
                 return NotFound();
             }
 
-            var tiporiscoModel = await _context.Tiporisco
-                .FirstOrDefaultAsync(m => m.id_risco == id);
-            if (tiporiscoModel == null)
+            TiporiscoModel tiporiscos = _tiporiscoRepository.ListarPorId(id_risco);
+
+            if (tiporiscos == null)
             {
                 return NotFound();
             }
 
-            return View(tiporiscoModel);
+            return View(tiporiscos);
         }
 
-        // GET: Tiporisco/Create
         public IActionResult Create(int id_coordenadas, int id_risco)
         {
             var model = new TiporiscoModel
@@ -61,110 +60,55 @@ namespace GlobalSolution_.NET.Controllers
             return View(model);
         }
 
-        // POST: Tiporisco/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_risco,categoria")] TiporiscoModel tiporiscoModel, int id_coordenadas)
+        public IActionResult Create(TiporiscoModel tiporiscos, int id_coordenadas)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(tiporiscoModel);
-                await _context.SaveChangesAsync();
-                int id_risco = tiporiscoModel.id_risco;
-                return RedirectToAction("Create", "Especie", new { id_risco, id_coordenadas = id_coordenadas });
+                _tiporiscoRepository.Adicionar(tiporiscos);
+                int id_risco = tiporiscos.id_risco;
+                return RedirectToAction("Create", "Especie", new { id_risco, id_coordenadas });
             }
-            return View(tiporiscoModel);
+            return View(tiporiscos);
         }
 
-        // GET: Tiporisco/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id_risco)
         {
-            if (id == null)
+            TiporiscoModel tiporiscos = _tiporiscoRepository.ListarPorId(id_risco);
+            ViewBag.CategoriaRisco = Enum.GetValues(typeof(CategoriaRisco)).Cast<CategoriaRisco>().Select(e => new SelectListItem
             {
-                return NotFound();
-            }
-
-            var tiporiscoModel = await _context.Tiporisco.FindAsync(id);
-            if (tiporiscoModel == null)
-            {
-                return NotFound();
-            }
-            return View(tiporiscoModel);
+                Value = e.ToString(),
+                Text = e.ToString()
+            }).ToList();
+            return View(tiporiscos);
         }
 
-        // POST: Tiporisco/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_risco,categoria")] TiporiscoModel tiporiscoModel)
+        public IActionResult Edit(TiporiscoModel tiporiscos)
         {
-            if (id != tiporiscoModel.id_risco)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(tiporiscoModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TiporiscoModelExists(tiporiscoModel.id_risco))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(tiporiscoModel);
+            _tiporiscoRepository.Atualizar(tiporiscos);
+            return RedirectToAction("Index");
         }
 
-        // GET: Tiporisco/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id_risco)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var tiporiscoModel = await _context.Tiporisco
-                .FirstOrDefaultAsync(m => m.id_risco == id);
-            if (tiporiscoModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(tiporiscoModel);
+            _tiporiscoRepository.Apagar(id_risco);
+            return RedirectToAction("Index");
         }
 
-        // POST: Tiporisco/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id_risco)
         {
-            var tiporiscoModel = await _context.Tiporisco.FindAsync(id);
-            if (tiporiscoModel != null)
-            {
-                _context.Tiporisco.Remove(tiporiscoModel);
-            }
-
-            await _context.SaveChangesAsync();
+            TiporiscoModel tiporiscos = _tiporiscoRepository.ListarPorId(id_risco);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TiporiscoModelExists(int id)
-        {
-            return _context.Tiporisco.Any(e => e.id_risco == id);
-        }
+        //private bool TiporiscoModelExists(int id)
+        //{
+        //    return _context.Tiporisco.Any(e => e.id_risco == id);
+        //}
     }
 }
