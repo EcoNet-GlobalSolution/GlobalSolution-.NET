@@ -26,20 +26,9 @@ namespace GlobalSolution_.NET.Controllers
             return View(especies);
         }
 
-        public async Task<IActionResult> Details(int id_especie)
+        public IActionResult Details(int id_especie)
         {
-            if (id_especie == null)
-            {
-                return NotFound();
-            }
-                
-                EspecieModel especie = _especieRepository.ListarPorId(id_especie);
-
-            if (especie == null)
-            {
-                return NotFound();
-            }
-
+            EspecieModel especie = _especieRepository.ListarPorId(id_especie);
             return View(especie);
         }
 

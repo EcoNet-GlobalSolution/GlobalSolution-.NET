@@ -27,13 +27,8 @@ namespace GlobalSolution_.NET.Controllers
             return View(tiporiscos);
         }
 
-        public async Task<IActionResult> Details(int id_risco)
+        public IActionResult Details(int id_risco)
         {
-            if (id_risco == null)
-            {
-                return NotFound();
-            }
-
             TiporiscoModel tiporiscos = _tiporiscoRepository.ListarPorId(id_risco);
 
             if (tiporiscos == null)
