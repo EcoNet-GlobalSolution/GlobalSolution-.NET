@@ -2,8 +2,32 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-
+<div class="container mt-4">
+    <h1 class="display-4 text-center">Bem-vindo</h1>
+    <hr />
+    <p class="lead text-justify">
+        Em um cenário onde a preservação dos recursos marinhos se torna uma prioridade global, o nosso projeto surge com o objetivo de promover uma pesca mais sustentável, por meio da utilização de tecnologias avançadas para o monitoramento das espécies marinhas capturadas. Durante a atividade de pesca, as espécies de peixes serão monitoradas e identificadas, determinando se estão classificadas como Criticamente em Perigo (CR), Criticamente em Perigo Possivelmente Extinta (CR(PEX)), Em Perigo (EN), ou Vulnerável (VU). Essas informações serão georreferenciadas, ou seja, serão registradas as coordenadas de onde cada espécie foi capturada, alimentando um aplicativo que disponibilizará esses dados.
+    </p>
+    <p class="lead text-justify">
+        Com este sistema, os pescadores poderão evitar áreas onde há a presença de espécies ameaçadas, contribuindo para a preservação da biodiversidade marinha. Além disso, o aplicativo permitirá aos pescadores planejar suas atividades com base na disponibilidade das espécies que desejam capturar, evitando esforços infrutíferos e melhorando a eficiência da pesca. Essa ferramenta é crucial não apenas para a pesca sustentável e auxílio na tomada de decisões, mas também para a conservação das espécies, ao fornecer dados precisos e em tempo real sobre a distribuição das populações marinhas.
+    </p>
+    <p class="lead text-justify">
+        A longo prazo, o projeto também visa colaborar na fiscalização e no cumprimento das leis ambientais. As autoridades poderão utilizar os dados fornecidos pelo aplicativo para monitorar as áreas de pesca e garantir que espécies ameaçadas não sejam capturadas ilegalmente, aplicando multas e penalidades quando necessário. Além disso, biólogos e conservacionistas poderão utilizar as informações coletadas para desenvolver programas e estratégias de reprodução e conservação, combatendo de forma mais eficaz a extinção das espécies marinhas.
+    </p>
+    <p class="lead text-justify">
+        Em resumo, nosso projeto representa um passo significativo em direção à pesca sustentável e à preservação dos ecossistemas marinhos. Por meio da integração de tecnologia e conservação, esse projeto oferece soluções práticas e eficazes para proteger nossos oceanos e promover práticas de pesca mais sustentáveis, garantindo a sobrevivência das espécies marinhas.
+    </p>
+    <h2 class="mt-5">Inteligência Artificial</h2>
+    <p class="lead text-justify">
+        Dado a ideia de nosso projeto, necessitamos de uma ferramenta capaz de identificar as espécies de animais aquáticos que estejam em risco de extinção, na qual usaremos um modelo de visão computacional para o reconhecimentos das espécies. Para isso utilizaremos a plataforma online de criação de modelos de visão computacional Roboflow.
+    </p>
+    <p class="lead text-justify">
+        A criação do DataSet foi feita considerando as espécies da fauna marinha e de rios que estão em ameaça ou à iminência da extinção no Brasil, de acordo com o site do governo: <a href="https://www.icmbio.gov.br/cepsul/destaques-e-eventos/492-lista-de-especies-ameacadas-saiba-mais.html">https://www.icmbio.gov.br/cepsul/destaques-e-eventos/492-lista-de-especies-ameacadas-saiba-mais.html</a>.
+    </p>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
