@@ -7,152 +7,91 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GlobalSolution_.NET.Models;
 using GlobalSolution_.NET.Persistence;
+using GlobalSolution_.NET.Repositories;
 
 namespace GlobalSolution_.NET.Controllers
 {
     public class CoordenadasController : Controller
     {
-        private readonly OracleDbContext _context;
+        private readonly ICoordenadasRepository _coordenadasRepository;
 
-        public CoordenadasController(OracleDbContext context)
+        public CoordenadasController(ICoordenadasRepository coordenadasRepository)
         {
-            _context = context;
+            _coordenadasRepository = coordenadasRepository;
         }
 
-        // GET: Coordenadas
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Coordenadas.ToListAsync());
+            List<CoordenadasModel> coordenadas = _coordenadasRepository.BuscarTodos();
+            return View(coordenadas);
         }
 
-        // GET: Coordenadas/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id_coordenadas)
         {
-            if (id == null)
+            if (id_coordenadas == null)
             {
                 return NotFound();
             }
 
-            var coordenadasModel = await _context.Coordenadas
-                .FirstOrDefaultAsync(m => m.id_coordenadas == id);
-            if (coordenadasModel == null)
+            CoordenadasModel coordenadas = _coordenadasRepository.ListarPorId(id_coordenadas);
+
+            if (coordenadas == null)
             {
                 return NotFound();
             }
 
-            return View(coordenadasModel);
+            return View(coordenadas);
         }
 
-        // GET: Coordenadas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Coordenadas/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_coordenadas,longitude,latitude")] CoordenadasModel coordenadasModel)
+        public IActionResult Create(CoordenadasModel coordenadas)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(coordenadasModel);
-                await _context.SaveChangesAsync();
-                int id_coordenadas = coordenadasModel.id_coordenadas;
+                _coordenadasRepository.Adicionar(coordenadas);
+                int id_coordenadas = coordenadas.id_coordenadas;
                 return RedirectToAction("Create", "Tiporisco", new { id_coordenadas });
             }
-            return View(coordenadasModel);
+            return View(coordenadas);
         }
 
-        // GET: Coordenadas/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id_coordenadas)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var coordenadasModel = await _context.Coordenadas.FindAsync(id);
-            if (coordenadasModel == null)
-            {
-                return NotFound();
-            }
-            return View(coordenadasModel);
+            CoordenadasModel coordenadas = _coordenadasRepository.ListarPorId(id_coordenadas);
+            return View(coordenadas);
         }
 
-        // POST: Coordenadas/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_coordenadas,longitude,latitude")] CoordenadasModel coordenadasModel)
+        public IActionResult Edit(CoordenadasModel coordenadas)
         {
-            if (id != coordenadasModel.id_coordenadas)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(coordenadasModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CoordenadasModelExists(coordenadasModel.id_coordenadas))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(coordenadasModel);
+            _coordenadasRepository.Atualizar(coordenadas);
+            return RedirectToAction("Index");
         }
 
-        // GET: Coordenadas/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id_coordenadas)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var coordenadasModel = await _context.Coordenadas
-                .FirstOrDefaultAsync(m => m.id_coordenadas == id);
-            if (coordenadasModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(coordenadasModel);
+            _coordenadasRepository.Apagar(id_coordenadas);
+            return RedirectToAction("Index");
         }
 
-        // POST: Coordenadas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id_coordenadas)
         {
-            var coordenadasModel = await _context.Coordenadas.FindAsync(id);
-            if (coordenadasModel != null)
-            {
-                _context.Coordenadas.Remove(coordenadasModel);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            CoordenadasModel coordenadas = _coordenadasRepository.ListarPorId(id_coordenadas);
+            return View(coordenadas);
         }
 
-        private bool CoordenadasModelExists(int id)
-        {
-            return _context.Coordenadas.Any(e => e.id_coordenadas == id);
-        }
+        //private bool CoordenadasModelExists(int id)
+        //{
+        //    return _context.Coordenadas.Any(e => e.id_coordenadas == id);
+        //}
     }
 }

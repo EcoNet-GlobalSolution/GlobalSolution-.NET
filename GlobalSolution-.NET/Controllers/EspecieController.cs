@@ -1,160 +1,103 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GlobalSolution_.NET.Models;
 using GlobalSolution_.NET.Persistence;
+using GlobalSolution_.NET.Repositories;
 
 namespace GlobalSolution_.NET.Controllers
 {
     public class EspecieController : Controller
     {
-        private readonly OracleDbContext _context;
+        private readonly IEspecieRepository _especieRepository;
 
-        public EspecieController(OracleDbContext context)
+        public EspecieController(IEspecieRepository especieRepository)
         {
-            _context = context;
+            _especieRepository = especieRepository;
         }
 
-        // GET: Especie
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Especie.ToListAsync());
+            List<EspecieModel> especies = _especieRepository.BuscarTodos();
+            return View(especies);
         }
 
-        // GET: Especie/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id_especie)
         {
-            if (id == null)
+            if (id_especie == null)
+            {
+                return NotFound();
+            }
+                
+                EspecieModel especie = _especieRepository.ListarPorId(id_especie);
+
+            if (especie == null)
             {
                 return NotFound();
             }
 
-            var especieModel = await _context.Especie
-                .FirstOrDefaultAsync(m => m.id_especie == id);
-            if (especieModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(especieModel);
+            return View(especie);
         }
 
-        // GET: Especie/Create
         public IActionResult Create(int id_risco, int id_coordenadas)
         {
-            ViewBag.id_risco = id_risco;
+            var model = new EspecieModel
+            {
+                id_risco = id_risco,
+            };
             ViewBag.id_coordenadas = id_coordenadas;
-            return View();
+            return View(model);
         }
 
-        // POST: Especie/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_especie,nome_comum,especie,id_risco")] EspecieModel especieModel, int id_coordenadas)
+        public IActionResult Create(EspecieModel especies, int id_coordenadas)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(especieModel);
-                await _context.SaveChangesAsync();
-                int id_especie = especieModel.id_especie;
+                
+                _especieRepository.Adicionar(especies);
+                int id_especie = especies.id_especie;
                 return RedirectToAction("Create", "Deteccao", new { id_especie, id_coordenadas });
             }
-            return View(especieModel);
+            return View(especies);
         }
 
-        // GET: Especie/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id_especie)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var especieModel = await _context.Especie.FindAsync(id);
-            if (especieModel == null)
-            {
-                return NotFound();
-            }
-            return View(especieModel);
+            EspecieModel especies = _especieRepository.ListarPorId(id_especie);
+            return View(especies);
         }
 
-        // POST: Especie/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_especie,nome_comum,especie,id_risco")] EspecieModel especieModel)
+        public IActionResult Edit(EspecieModel especies)
         {
-            if (id != especieModel.id_especie)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(especieModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!EspecieModelExists(especieModel.id_especie))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(especieModel);
+            _especieRepository.Atualizar(especies);
+            return RedirectToAction("Index");
         }
 
-        // GET: Especie/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id_especie)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var especieModel = await _context.Especie
-                .FirstOrDefaultAsync(m => m.id_especie == id);
-            if (especieModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(especieModel);
+            _especieRepository.Apagar(id_especie);
+            return RedirectToAction("Index");
         }
 
-        // POST: Especie/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id_especie)
         {
-            var especieModel = await _context.Especie.FindAsync(id);
-            if (especieModel != null)
-            {
-                _context.Especie.Remove(especieModel);
-            }
-
-            await _context.SaveChangesAsync();
+            _especieRepository.Apagar(id_especie);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EspecieModelExists(int id)
-        {
-            return _context.Especie.Any(e => e.id_especie == id);
-        }
+        //private bool EspecieModelExists(int id)
+        //{
+        //    return _context.Especie.Any(e => e.id_especie == id);
+        //}
     }
 }

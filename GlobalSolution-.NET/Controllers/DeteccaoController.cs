@@ -7,164 +7,95 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GlobalSolution_.NET.Models;
 using GlobalSolution_.NET.Persistence;
+using GlobalSolution_.NET.Repositories;
 
 namespace GlobalSolution_.NET.Controllers
 {
     public class DeteccaoController : Controller
     {
-        private readonly OracleDbContext _context;
+        private readonly IDeteccaoRepository _deteccaoRepository;
 
-        public DeteccaoController(OracleDbContext context)
+        public DeteccaoController(IDeteccaoRepository deteccaoRepository)
         {
-            _context = context;
+            _deteccaoRepository = deteccaoRepository;
         }
 
-        // GET: Deteccao
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var oracleDbContext = _context.Deteccao.Include(d => d.Coordenadas).Include(d => d.Especie);
-            return View(await oracleDbContext.ToListAsync());
+            List<DeteccaoModel> deteccoes = _deteccaoRepository.BuscarTodos();
+            return View(deteccoes);
         }
 
-        // GET: Deteccao/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id_deteccao)
         {
-            if (id == null)
+            if (id_deteccao == null)
             {
                 return NotFound();
             }
 
-            var deteccaoModel = await _context.Deteccao
-                .Include(d => d.Coordenadas)
-                .Include(d => d.Especie)
-                .FirstOrDefaultAsync(m => m.id_deteccao == id);
-            if (deteccaoModel == null)
+            DeteccaoModel deteccoes = _deteccaoRepository.ListarPorId(id_deteccao);
+
+            if (deteccoes == null)
             {
                 return NotFound();
             }
 
-            return View(deteccaoModel);
+            return View(deteccoes);
         }
 
-        // GET: Deteccao/Create
         public IActionResult Create(int id_especie, int id_coordenadas)
         {
-            ViewBag.id_especie = id_especie;
-            ViewBag.id_coordenadas = id_coordenadas;
-            return View();
+            var model = new DeteccaoModel
+            {
+                id_especie = id_especie,
+                id_coordenadas = id_coordenadas
+            };
+            return View(model);
         }
 
-        // POST: Deteccao/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id_deteccao,data,id_coordenadas,id_especie")] DeteccaoModel deteccaoModel)
+        public IActionResult Create(DeteccaoModel deteccao)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(deteccaoModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _deteccaoRepository.Adicionar(deteccao);
+                return RedirectToAction("Index", "Especie");
             }
-            ViewData["id_coordenadas"] = new SelectList(_context.Coordenadas, "id_coordenadas", "id_coordenadas", deteccaoModel.id_coordenadas);
-            ViewData["id_especie"] = new SelectList(_context.Especie, "id_especie", "especie", deteccaoModel.id_especie);
-            return View(deteccaoModel);
+            return View(deteccao);
         }
 
-        // GET: Deteccao/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int id_deteccao)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var deteccaoModel = await _context.Deteccao.FindAsync(id);
-            if (deteccaoModel == null)
-            {
-                return NotFound();
-            }
-            ViewData["id_coordenadas"] = new SelectList(_context.Coordenadas, "id_coordenadas", "id_coordenadas", deteccaoModel.id_coordenadas);
-            ViewData["id_especie"] = new SelectList(_context.Especie, "id_especie", "especie", deteccaoModel.id_especie);
-            return View(deteccaoModel);
+            DeteccaoModel deteccoes = _deteccaoRepository.ListarPorId(id_deteccao);
+            return View(deteccoes);
         }
 
-        // POST: Deteccao/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id_deteccao,data,id_coordenadas,id_especie")] DeteccaoModel deteccaoModel)
+        public IActionResult Edit(DeteccaoModel deteccoes)
         {
-            if (id != deteccaoModel.id_deteccao)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(deteccaoModel);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!DeteccaoModelExists(deteccaoModel.id_deteccao))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["id_coordenadas"] = new SelectList(_context.Coordenadas, "id_coordenadas", "id_coordenadas", deteccaoModel.id_coordenadas);
-            ViewData["id_especie"] = new SelectList(_context.Especie, "id_especie", "especie", deteccaoModel.id_especie);
-            return View(deteccaoModel);
+            _deteccaoRepository.Atualizar(deteccoes);
+            return RedirectToAction("Index");
         }
 
-        // GET: Deteccao/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id_deteccao)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var deteccaoModel = await _context.Deteccao
-                .Include(d => d.Coordenadas)
-                .Include(d => d.Especie)
-                .FirstOrDefaultAsync(m => m.id_deteccao == id);
-            if (deteccaoModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(deteccaoModel);
+            _deteccaoRepository.Apagar(id_deteccao);
+            return RedirectToAction("Index");
         }
 
-        // POST: Deteccao/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id_deteccao)
         {
-            var deteccaoModel = await _context.Deteccao.FindAsync(id);
-            if (deteccaoModel != null)
-            {
-                _context.Deteccao.Remove(deteccaoModel);
-            }
-
-            await _context.SaveChangesAsync();
+            _deteccaoRepository.Apagar(id_deteccao);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DeteccaoModelExists(int id)
-        {
-            return _context.Deteccao.Any(e => e.id_deteccao == id);
-        }
+        //private bool DeteccaoModelExists(int id)
+        //{
+        //    return _context.Deteccao.Any(e => e.id_deteccao == id);
+        //}
     }
 }

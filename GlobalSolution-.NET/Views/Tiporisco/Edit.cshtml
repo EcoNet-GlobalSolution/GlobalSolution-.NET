@@ -13,9 +13,8 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="id_risco" />
             <div class="form-group">
-                <label asp-for="categoria" class="control-label"></label>
-                <input asp-for="categoria" class="form-control" />
-                <span asp-validation-for="categoria" class="text-danger"></span>
+                <label for="categoria">Categoria do risco <span class="text-danger">*</span></label>
+                <select asp-for="categoria" class="form-control" asp-items="@(ViewBag.CategoriaRisco as IEnumerable<SelectListItem>)"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
